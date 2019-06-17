@@ -1,6 +1,9 @@
 <template>
     <div class="movie_body">
-        <ul>
+              <Loading v-if="isLoading"/>
+
+        <Scroller>
+             <ul>
             <!-- <li>
                 <div class="pic_show"><img src="/images/movie_1.jpg"></div>
                 <div class="info_list">
@@ -26,6 +29,8 @@
                 </div>
             </li>
         </ul>
+        </Scroller>
+       
     </div>
 </template>
 
@@ -35,15 +40,22 @@ export default {
     name:'ComingSoon',
     data(){
         return {
-            comingList:[]
+            comingList:[],
+            isLoading:true,
+            prevCityId:-1
         }
     },
-    mounted(){
+    activated(){
+        var cityId=this.$store.state.city.id;
+        if(this.prevCityId===cityId){return;}
+        this.isLoading=true;
         this.axios.get('/api/movieComingList?cityId=10').then((res)=>{
             var msg=res.data.msg;
             if(msg === 'ok'){
                 this.comingList = res.data.data.comingList;
-            }
+                this.isLoading =false;
+                this.prevCityId=cityId;
+           }
         })
         
     }
