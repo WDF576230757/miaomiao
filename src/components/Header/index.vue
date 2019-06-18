@@ -1,16 +1,16 @@
 <template>
     <header id="header">
-        <slot></slot><h1>{{title}}</h1>
+        <slot></slot> <h1>{{ title }}</h1>
     </header>
 </template>
 
 <script>
 export default {
-    name:'Header',
-    props:{
-        title:{
-            type:String,
-            default:'喵喵电影'
+    name : 'Header',
+    props : {
+        title : {
+            type : String,
+            default : '喵喵电影'
         }
     }
 }

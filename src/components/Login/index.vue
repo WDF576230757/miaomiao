@@ -13,12 +13,12 @@
             <a href="#">立即注册</a>
             <a href="#">找回密码</a>
         </div>
-	</div>
+    </div>
 </template>
 
 <script>
 export default {
-    name:"Login"
+    name : 'Login'
 }
 </script>
 
@@ -29,5 +29,4 @@ export default {
 .login_body .login_btn input{ width:100%; height:100%; background:#e54847; border-radius: 3px; border:none; display: block; color:white; font-size: 20px;}
 .login_body .login_link{ display: flex; justify-content:space-between;}
 .login_body .login_link a{ text-decoration: none; margin:0 5px; font-size: 12px; color:#e54847;}
-
 </style>
