@@ -1,6 +1,6 @@
 <template>
   <div class="movie_body" ref="movie_body">
-      <Loading v-if="isLoading"/>
+    <Loading v-if="isLoading"/>
     <Scroller v-else :handleToScroll="handleToScroll" :handleToTouchEnd="handleToTouchEnd">
       <ul>
         <!-- <li>
@@ -17,11 +17,11 @@
         </li>-->
         <li class="pullDown">{{pullDownMsg}}</li>
         <li v-for="item in movieList" :key="item.id">
-          <div class="pic_show" @tap="handleToDetail">
+          <div class="pic_show" @tap="handleToDetail(item.id)">
             <img :src="item.img | setWH('128.180')">
           </div>
           <div class="info_list">
-            <h2>
+            <h2 @tap="handleToDetail(item.id)">
               {{item.nm}}
               <img height="30px" v-if="item.version" src="@/assets/IMAX.png">
             </h2>
@@ -41,7 +41,6 @@
 
 <script>
 // import BScroll from "better-scroll";
-import { log } from "util";
 
 export default {
   name: "NowPlaying",
@@ -49,26 +48,24 @@ export default {
     return {
       movieList: [],
       pullDownMsg: "",
-      isLoading:true,
-      prevCityId:-1
+      isLoading: true,
+      prevCityId: -1
     };
   },
   activated() {
-
-    var cityId=this.$store.state.city.id;
+    var cityId = this.$store.state.city.id;
     // console.log(cityId);
-    if(this.prevCityId ===cityId){
-        return;
+    if (this.prevCityId === cityId) {
+      return;
     }
-    
-    
-    this.isLoading =true;
 
-    this.axios.get("/api/movieOnInfoList?cityId=1"+cityId).then(res => {
+    this.isLoading = true;
+
+    this.axios.get("/api/movieOnInfoList?cityId=1" + cityId).then(res => {
       var msg = res.data.msg;
       if (msg === "ok") {
         this.movieList = res.data.data.movieList;
-        this.isLoading =false;
+        this.isLoading = false;
         this.prevCityId = cityId;
         // this.$nextTick(() => {
         //   var scroll = new BScroll(this.$refs.movie_body, {
@@ -103,27 +100,28 @@ export default {
   },
 
   methods: {
-    handleToDetail() {
-      console.log("handleToDetail");
+    handleToDetail(movieId) {
+      // console.log(this.$router);
+      this.$router.push("/movie/detail/1/"+movieId);
     },
-    handleToScroll(pos){
-        if(pos.y>30){
-            this.pullDownMsg='正在更新中'
-        }
+    handleToScroll(pos) {
+      if (pos.y > 30) {
+        this.pullDownMsg = "正在更新中";
+      }
     },
-    handleToTouchEnd(pos){
-        if (pos.y > 30) {
-            this.axios.get("/api/movieOnInfoList?cityId=11").then(res => {
-            var msg = res.data.msg;
-            if (msg === "ok") {
-                this.pullDownMsg = "更新成功";
-                setTimeout(() => {
-                this.movieList = res.data.data.movieList;
-                this.pullDownMsg = "";
-                }, 1000);
-            }
-            });
-        }
+    handleToTouchEnd(pos) {
+      if (pos.y > 30) {
+        this.axios.get("/api/movieOnInfoList?cityId=11").then(res => {
+          var msg = res.data.msg;
+          if (msg === "ok") {
+            this.pullDownMsg = "更新成功";
+            setTimeout(() => {
+              this.movieList = res.data.data.movieList;
+              this.pullDownMsg = "";
+            }, 1000);
+          }
+        });
+      }
     }
   }
 };
